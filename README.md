@@ -571,32 +571,6 @@ SOFTWARE.
 
 ---
 
-## 🙏 Agradecimientos
-
-### 🏆 **Patrocinadores y Partners**
-
-- 🏛️ **Samsung Innovation Campus 2025** - Por brindarnos la plataforma y recursos
-- 🏥 **CSS (Caja de Seguro Social)** - Por su apoyo en la validación del concepto
-- 🏛️ **MINSA (Ministerio de Salud)** - Por facilitar la integración con sistemas públicos
-- 🏛️ **City of Knowledge** - Por el apoyo en financiamiento y mentoría
-- 🚀 **Startup Panamá** - Por la incubación y apoyo empresarial
-
-### 👥 **Mentores y Asesores**
-
-- **Dr. Carlos Vargas** - Especialista en Salud Digital (CSS)
-- **Ing. María González** - Experta en Blockchain (City of Knowledge)
-- **Lic. Roberto Silva** - Abogado especialista en Ley 81 de 2019
-- **Dr. Ana Martínez** - Especialista en IA aplicada a salud
-
-### 📚 **Recursos y Referencias**
-
-- [Ley 81 de 2019 - Protección de Datos Personales](https://www.asamblea.gob.pa/leyes/ley-81-2019)
-- [HL7 FHIR - Estándar de Interoperabilidad](https://www.hl7.org/fhir/)
-- [HIPAA - Health Insurance Portability and Accountability Act](https://www.hhs.gov/hipaa/)
-- [GDPR - General Data Protection Regulation](https://gdpr.eu/)
-
----
-
 <div align="center">
 
 ### 🌟 **¡Únete a la Revolución Digital en Salud!** 🌟
