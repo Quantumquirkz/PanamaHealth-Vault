@@ -20,7 +20,6 @@
 - [Beneficios](#-beneficios)
 - [Ejemplo Práctico](#-ejemplo-práctico)
 - [Seguridad y Privacidad](#-seguridad-y-privacidad)
-- [Equipo de Desarrollo](#-equipo-de-desarrollo)
 - [Próximos Pasos](#-próximos-pasos)
 
 ---
@@ -408,42 +407,6 @@ contract MedicalAccess {
 
 ---
 
-## 👥 Equipo de Desarrollo
-
-### 🎓 **Samsung Innovation Campus 2025**
-
-#### 👨‍💻 **Jhuomar Barría**
-- **Rol:** Tech Lead & Blockchain Developer
-- **Especialidad:** Desarrollo de smart contracts y arquitectura blockchain
-- **Experiencia:** 3 años en desarrollo de aplicaciones descentralizadas
-- **LinkedIn:** [Jhuomar Barría](https://linkedin.com/in/jhuomarbarria)
-
-#### 👨‍💻 **Isaías Reyes**
-- **Rol:** AI/ML Engineer & Data Scientist
-- **Especialidad:** Procesamiento de lenguaje natural y machine learning
-- **Experiencia:** 4 años en proyectos de IA aplicada a salud
-- **LinkedIn:** [Isaías Reyes](https://linkedin.com/in/isaiasreyes)
-
-#### 👨‍💻 **Max Contreras**
-- **Rol:** Full-Stack Developer & DevOps
-- **Especialidad:** Desarrollo web, APIs y infraestructura cloud
-- **Experiencia:** 5 años en desarrollo de aplicaciones empresariales
-- **LinkedIn:** [Max Contreras](https://linkedin.com/in/maxcontreras)
-
-#### 👨‍💻 **José Rodriguez**
-- **Rol:** Frontend Developer & UX/UI Designer
-- **Especialidad:** Next.js, React.js y diseño de interfaces web
-- **Experiencia:** 3 años en desarrollo de aplicaciones web y móviles
-- **LinkedIn:** [José Rodriguez](https://linkedin.com/in/joserodriguez)
-
-### 🏆 **Reconocimientos del Equipo**
-- 🥇 **1er Lugar** - Hackathon de Salud Digital 2024
-- 🏅 **Mejor Proyecto de IA** - Samsung Innovation Campus 2025
-- 🎯 **Certificación AWS** - Todos los miembros
-- 📚 **Especialización** - HealthTech y Blockchain
-
----
-
 ## 🚀 Próximos Pasos
 
 ### 🎯 **Objetivos Inmediatos (Próximos 3 meses)**
@@ -522,14 +485,7 @@ contract MedicalAccess {
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abrir un Pull Request
 
-### 📧 **Contacto del Equipo**
-
-| Miembro | Email | LinkedIn | GitHub |
-|---------|-------|----------|--------|
-| **Jhuomar Barría** | jhuomar.barria@panamahealth.com | [LinkedIn](https://linkedin.com/in/jhuomarbarria) | [@jhuomarbarria](https://github.com/jhuomarbarria) |
-| **Isaías Reyes** | isaias.reyes@panamahealth.com | [LinkedIn](https://linkedin.com/in/isaiasreyes) | [@isaiasreyes](https://github.com/isaiasreyes) |
-| **Max Contreras** | max.contreras@panamahealth.com | [LinkedIn](https://linkedin.com/in/maxcontreras) | [@maxcontreras](https://github.com/maxcontreras) |
-| **José Rodriguez** | jose.rodriguez@panamahealth.com | [LinkedIn](https://linkedin.com/in/joserodriguez) | [@joserodriguez](https://github.com/joserodriguez) |
+### 📧 **Contacto del Proyecto**
 
 ### 🌐 **Enlaces Importantes**
 
