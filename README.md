@@ -98,9 +98,9 @@ Nuestra plataforma integra tecnologías de vanguardia para crear un ecosistema d
 ```mermaid
 graph TB
     subgraph "Frontend Layer"
-        A[App Móvil<br/>React Native]
+        A[App Web Pacientes<br/>Next.js]
         B[Dashboard Médico<br/>React.js]
-        C[Portal Paciente<br/>React.js]
+        C[Portal Institucional<br/>React.js]
     end
     
     subgraph "API Gateway"
@@ -160,11 +160,12 @@ graph TB
 ## ⭐ Características Principales
 
 ### 🎯 **Para Pacientes**
-- 📱 **App móvil intuitiva** para gestionar expediente personal
+- 🌐 **Aplicación web intuitiva** para gestionar expediente personal
 - 🔔 **Notificaciones inteligentes** sobre citas y resultados
 - 📊 **Dashboard personalizado** con métricas de salud
 - 🔐 **Control total de privacidad** y permisos de acceso
-- 🌐 **Acceso universal** desde cualquier dispositivo
+- 📱 **Acceso desde cualquier dispositivo** (responsive design)
+- 📱 **App móvil** (funcionalidad futura - Fase 2)
 
 ### 👩‍⚕️ **Para Médicos**
 - 💻 **Dashboard profesional** con vista completa del paciente
@@ -192,11 +193,11 @@ graph TB
 | **PostgreSQL** | Base de datos principal | 15+ |
 | **Redis** | Cache y sesiones | 7.0+ |
 
-### **Frontend & Mobile**
+### **Frontend Web**
 | Tecnología | Propósito | Versión |
 |------------|-----------|----------|
-| **React.js** | Dashboard web | 18.2+ |
-| **React Native** | App móvil | 0.72+ |
+| **Next.js** | Aplicación web principal | 14.0+ |
+| **React.js** | Dashboard médico | 18.2+ |
 | **TypeScript** | Tipado estático | 5.0+ |
 | **Tailwind CSS** | Estilos | 3.3+ |
 
@@ -232,16 +233,16 @@ graph TB
 ```mermaid
 sequenceDiagram
     participant P as Paciente
-    participant A as App Móvil
+    participant W as App Web
     participant B as Blockchain
     participant N as RENAUT API
     
-    P->>A: Registro con cédula
-    A->>N: Validar identidad
-    N-->>A: Datos verificados
-    A->>B: Crear token único
-    B-->>A: Token generado
-    A-->>P: Expediente creado
+    P->>W: Registro con cédula
+    W->>N: Validar identidad
+    N-->>W: Datos verificados
+    W->>B: Crear token único
+    B-->>W: Token generado
+    W-->>P: Expediente creado
 ```
 
 ### 2. **Consulta Médica**
@@ -340,7 +341,7 @@ flowchart LR
 3. **IA procesa:** Los exámenes previos se muestran estructurados
 4. **Diagnóstico preciso:** El médico tiene contexto completo de su diabetes
 5. **Actualización automática:** El nuevo examen se sincroniza automáticamente
-6. **Notificación:** María recibe alerta en su app sobre el nuevo resultado
+6. **Notificación:** María recibe alerta en su aplicación web sobre el nuevo resultado
 
 **Resultado:**
 - ⏱️ **Tiempo de consulta:** 25 minutos (58% reducción)
@@ -431,8 +432,8 @@ contract MedicalAccess {
 
 #### 👨‍💻 **José Rodriguez**
 - **Rol:** Frontend Developer & UX/UI Designer
-- **Especialidad:** React.js, React Native y diseño de interfaces
-- **Experiencia:** 3 años en desarrollo de aplicaciones móviles
+- **Especialidad:** Next.js, React.js y diseño de interfaces web
+- **Experiencia:** 3 años en desarrollo de aplicaciones web y móviles
 - **LinkedIn:** [José Rodriguez](https://linkedin.com/in/joserodriguez)
 
 ### 🏆 **Reconocimientos del Equipo**
@@ -456,7 +457,7 @@ contract MedicalAccess {
 #### **2. Desarrollo del MVP**
 - [ ] **API core** con autenticación biométrica
 - [ ] **Dashboard médico** básico funcional
-- [ ] **App móvil** para pacientes
+- [ ] **Aplicación web** para pacientes (Next.js)
 - [ ] **Integración blockchain** con smart contracts
 
 #### **3. Testing y Validación**
@@ -533,7 +534,7 @@ contract MedicalAccess {
 ### 🌐 **Enlaces Importantes**
 
 - 🏠 **Website:** [www.panamahealth-vault.com](https://www.panamahealth-vault.com)
-- 📱 **App Store:** [Descargar App](https://apps.apple.com/panamahealth-vault)
+- 🌐 **Aplicación Web:** [Acceder a la App](https://app.panamahealth-vault.com)
 - 🤖 **Telegram:** [@PanamaHealthVault](https://t.me/PanamaHealthVault)
 - 📧 **Email General:** info@panamahealth-vault.com
 - 📞 **Teléfono:** +507 1234-5678
