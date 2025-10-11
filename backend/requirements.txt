@@ -1,0 +1,33 @@
+# API Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Database (SQLite - viene con Python)
+sqlalchemy==2.0.23
+alembic==1.12.1
+
+# Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.0
+
+# File handling
+aiofiles==23.2.1
+
+# OCR (opcional - comentar si no se usa)
+# pytesseract==0.3.10
+# pdf2image==1.16.3
+
+# Image Processing
+Pillow==10.1.0
+
+# Utils
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Development
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2
+

@@ -1,395 +1,464 @@
-# 🏗️ Arquitectura del Sistema PanamaHealth Vault
+# 🏗️ Arquitectura del Sistema
 
-## 📊 Diagrama de Arquitectura Completo
+## Visión General
 
-### Vista General del Sistema
+PanamaHealth Vault utiliza una arquitectura simple de 2 capas **SIN DOCKER**:
 
-```mermaid
-graph TB
-    subgraph "🌐 Frontend Layer"
-        A[📱 App Móvil<br/>React Native<br/>iOS & Android]
-        B[💻 Dashboard Médico<br/>React.js<br/>Web Application]
-        C[👤 Portal Paciente<br/>React.js<br/>Web Interface]
-    end
-    
-    subgraph "🔐 API Gateway Layer"
-        D[🚪 FastAPI Gateway<br/>• Autenticación<br/>• Rate Limiting<br/>• Load Balancing<br/>• SSL Termination]
-    end
-    
-    subgraph "🧠 Core Services Layer"
-        E[🤖 AI Processing Service<br/>• OCR (Tesseract)<br/>• NLP (spaCy)<br/>• ML (TensorFlow)<br/>• Document Analysis]
-        F[🔑 Tokenization Service<br/>• Crypto Operations<br/>• Blockchain Integration<br/>• Data Encryption<br/>• Key Management]
-        G[📋 Medical Records Service<br/>• CRUD Operations<br/>• Data Validation<br/>• FHIR Compliance<br/>• Record Management]
-        H[🆔 Biometric Auth Service<br/>• Cédula Validation<br/>• Fingerprint Auth<br/>• Face Recognition<br/>• Multi-Factor Auth]
-    end
-    
-    subgraph "💾 Data Layer"
-        I[🗄️ PostgreSQL<br/>• Structured Data<br/>• Patient Records<br/>• User Management<br/>• Audit Logs]
-        J[📁 IPFS<br/>• Document Storage<br/>• Decentralized Files<br/>• Version Control<br/>• Content Addressing]
-        K[⚡ Redis<br/>• Session Cache<br/>• Real-time Data<br/>• Rate Limiting<br/>• Performance Cache]
-    end
-    
-    subgraph "⛓️ Blockchain Layer"
-        L[🔗 Hyperledger Fabric<br/>• Smart Contracts<br/>• Access Control<br/>• Audit Trail<br/>• Consensus Mechanism]
-        M[🌐 Consensus Network<br/>• Validation Nodes<br/>• Healthcare Partners<br/>• Government Nodes<br/>• Trust Network]
-    end
-    
-    subgraph "🔌 External APIs"
-        N[🆔 RENAUT API<br/>• National ID<br/>• Identity Verification<br/>• Biometric Data<br/>• Citizen Database]
-        O[🏥 CSS/MINSA APIs<br/>• Health Systems<br/>• Patient Data<br/>• Medical Records<br/>• Institution Data]
-        P[🔐 Biometric Services<br/>• Fingerprint Scanner<br/>• Face Recognition<br/>• Iris Scanner<br/>• Voice Recognition]
-    end
-    
-    subgraph "☁️ Infrastructure"
-        Q[🐳 Docker Containers<br/>• Microservices<br/>• Isolation<br/>• Scalability<br/>• Deployment]
-        R[☸️ Kubernetes<br/>• Orchestration<br/>• Auto-scaling<br/>• Load Balancing<br/>• Service Discovery]
-        S[☁️ AWS/GCP<br/>• Cloud Computing<br/>• Storage<br/>• CDN<br/>• Monitoring]
-    end
-    
-    %% Frontend to API Gateway
-    A --> D
-    B --> D
-    C --> D
-    
-    %% API Gateway to Core Services
-    D --> E
-    D --> F
-    D --> G
-    D --> H
-    
-    %% Core Services to Data Layer
-    E --> I
-    E --> J
-    F --> L
-    G --> I
-    H --> K
-    
-    %% Blockchain Connections
-    F --> L
-    L --> M
-    
-    %% External API Connections
-    H --> N
-    H --> P
-    G --> O
-    
-    %% Infrastructure
-    Q --> R
-    R --> S
-    
-    %% Styling
-    style A fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    style B fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    style C fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style F fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    style L fill:#fff8e1,stroke:#f57f17,stroke-width:3px
-    style I fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-    style J fill:#e0f2f1,stroke:#00695c,stroke-width:2px
-    style K fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+1. **Frontend** - Interfaz web con React (localhost:3000)
+2. **Backend** - API REST con FastAPI (localhost:8000)
+   - Base de datos: SQLite (archivo local)
+   - Archivos: Sistema de archivos local
+
+**NO REQUIERE:**
+- ❌ Docker / Docker Compose
+- ❌ PostgreSQL
+- ❌ Redis
+- ❌ MinIO/S3
+- ❌ Ningún contenedor
+
+---
+
+## Diagrama de Arquitectura (Local)
+
 ```
-
-## 🔄 Flujo de Datos del Sistema
-
-### 1. Proceso de Autenticación
-
-```mermaid
-sequenceDiagram
-    participant U as 👤 Usuario
-    participant F as 📱 Frontend
-    participant A as 🚪 API Gateway
-    participant B as 🆔 Auth Service
-    participant R as 🆔 RENAUT API
-    participant BC as ⛓️ Blockchain
-    participant DB as 💾 Database
-    
-    U->>F: Ingresa cédula + biometría
-    F->>A: POST /auth/login
-    A->>B: Validar credenciales
-    B->>R: Verificar identidad nacional
-    R-->>B: Datos verificados
-    B->>BC: Crear token de acceso
-    BC-->>B: Token generado
-    B->>DB: Registrar sesión
-    DB-->>B: Sesión creada
-    B-->>A: JWT token + permisos
-    A-->>F: Autenticación exitosa
-    F-->>U: Acceso concedido
-```
-
-### 2. Procesamiento de Documentos Médicos
-
-```mermaid
-flowchart TD
-    A[📄 Documento Médico<br/>PDF/Imagen] --> B[🔍 OCR Service<br/>Tesseract]
-    B --> C[📝 Texto Extraído]
-    C --> D[🧠 NLP Processing<br/>spaCy + ML]
-    D --> E[📊 Datos Estructurados]
-    E --> F[✅ Validación IA<br/>TensorFlow]
-    F --> G[📋 Formato FHIR<br/>HL7 Standard]
-    G --> H[🔑 Tokenización<br/>Crypto Hash]
-    H --> I[💾 Almacenamiento<br/>PostgreSQL + IPFS]
-    I --> J[⛓️ Registro Blockchain<br/>Audit Trail]
-    J --> K[📱 Notificación<br/>Usuario Final]
-    
-    style A fill:#e3f2fd
-    style F fill:#e8f5e8
-    style I fill:#fff3e0
-    style J fill:#fff8e1
-```
-
-### 3. Acceso a Expediente Médico
-
-```mermaid
-sequenceDiagram
-    participant M as 👩‍⚕️ Médico
-    participant D as 💻 Dashboard
-    participant A as 🚪 API Gateway
-    participant G as 📋 Medical Records
-    participant AI as 🤖 AI Service
-    participant BC as ⛓️ Blockchain
-    participant P as 👤 Paciente
-    
-    M->>D: Busca paciente por cédula
-    D->>A: GET /patients/{cedula}
-    A->>G: Obtener expediente
-    G->>AI: Procesar documentos
-    AI-->>G: Datos estructurados
-    G-->>A: Expediente completo
-    A-->>D: Datos del paciente
-    D-->>M: Vista completa del historial
-    
-    M->>D: Agrega nuevo diagnóstico
-    D->>A: POST /records
-    A->>G: Guardar nuevo registro
-    G->>BC: Registrar cambio
-    BC-->>P: Notificación automática
-    G-->>A: Registro guardado
-    A-->>D: Confirmación
-    D-->>M: Diagnóstico agregado
-```
-
-## 🏗️ Arquitectura de Microservicios
-
-### Servicios Principales
-
-```mermaid
-graph LR
-    subgraph "🔐 Security Services"
-        A[🆔 Authentication Service]
-        B[🔑 Authorization Service]
-        C[🛡️ Encryption Service]
-    end
-    
-    subgraph "📋 Medical Services"
-        D[📊 Patient Management]
-        E[📄 Record Processing]
-        F[🤖 AI Analysis]
-        G[📱 Notification Service]
-    end
-    
-    subgraph "⛓️ Blockchain Services"
-        H[🔗 Smart Contracts]
-        I[📝 Audit Service]
-        J[🌐 Consensus Service]
-    end
-    
-    subgraph "💾 Data Services"
-        K[🗄️ Database Service]
-        L[📁 File Storage]
-        M[⚡ Cache Service]
-    end
-    
-    subgraph "🔌 Integration Services"
-        N[🏥 Hospital APIs]
-        O[🆔 Government APIs]
-        P[🔐 Biometric APIs]
-    end
-    
-    A --> D
-    B --> E
-    C --> F
-    D --> H
-    E --> I
-    F --> J
-    G --> K
-    H --> L
-    I --> M
-    J --> N
-    K --> O
-    L --> P
-    
-    style A fill:#ffebee
-    style D fill:#e8f5e8
-    style H fill:#fff8e1
-    style K fill:#e3f2fd
-    style N fill:#f3e5f5
-```
-
-## 🔒 Arquitectura de Seguridad
-
-### Capas de Seguridad
-
-```mermaid
-graph TB
-    subgraph "🌐 Perimeter Security"
-        A[🛡️ Web Application Firewall]
-        B[🚪 API Gateway Security]
-        C[🔒 SSL/TLS Termination]
-    end
-    
-    subgraph "🔐 Authentication & Authorization"
-        D[🆔 Multi-Factor Authentication]
-        E[🔑 JWT Token Management]
-        F[👤 Role-Based Access Control]
-        G[🔍 Biometric Verification]
-    end
-    
-    subgraph "🛡️ Data Protection"
-        H[🔐 End-to-End Encryption]
-        I[🔑 Key Management System]
-        J[🗝️ Tokenization Service]
-        K[⛓️ Blockchain Audit Trail]
-    end
-    
-    subgraph "🔍 Monitoring & Compliance"
-        L[📊 Security Monitoring]
-        M[🚨 Intrusion Detection]
-        N[📋 Compliance Reporting]
-        O[🔍 Audit Logging]
-    end
-    
-    A --> D
-    B --> E
-    C --> F
-    D --> H
-    E --> I
-    F --> J
-    G --> K
-    H --> L
-    I --> M
-    J --> N
-    K --> O
-    
-    style A fill:#ffebee,stroke:#d32f2f
-    style D fill:#e8f5e8,stroke:#388e3c
-    style H fill:#e3f2fd,stroke:#1976d2
-    style L fill:#fff8e1,stroke:#f57c00
-```
-
-## 📊 Métricas y Monitoreo
-
-### Dashboard de Monitoreo
-
-```mermaid
-graph TB
-    subgraph "📊 Application Metrics"
-        A[⚡ Response Time]
-        B[🔄 Throughput]
-        C[❌ Error Rate]
-        D[👥 Active Users]
-    end
-    
-    subgraph "🔒 Security Metrics"
-        E[🚨 Failed Logins]
-        F[🔍 Access Attempts]
-        G[🛡️ Security Events]
-        H[📋 Compliance Status]
-    end
-    
-    subgraph "💾 Infrastructure Metrics"
-        I[💽 CPU Usage]
-        J[🧠 Memory Usage]
-        K[💾 Disk Usage]
-        L[🌐 Network Traffic]
-    end
-    
-    subgraph "⛓️ Blockchain Metrics"
-        M[🔗 Transaction Count]
-        N[⏱️ Block Time]
-        O[🌐 Node Health]
-        P[🔐 Consensus Status]
-    end
-    
-    A --> I
-    B --> J
-    C --> K
-    D --> L
-    E --> M
-    F --> N
-    G --> O
-    H --> P
-    
-    style A fill:#e8f5e8
-    style E fill:#ffebee
-    style I fill:#e3f2fd
-    style M fill:#fff8e1
-```
-
-## 🚀 Escalabilidad y Performance
-
-### Estrategia de Escalabilidad
-
-```mermaid
-graph TB
-    subgraph "📈 Horizontal Scaling"
-        A[🔄 Load Balancer]
-        B[📱 App Instances]
-        C[💾 Database Sharding]
-        D[📁 CDN Distribution]
-    end
-    
-    subgraph "⚡ Performance Optimization"
-        E[🗄️ Database Indexing]
-        F[⚡ Redis Caching]
-        G[📦 Connection Pooling]
-        H[🔄 Async Processing]
-    end
-    
-    subgraph "☁️ Cloud Infrastructure"
-        I[🌐 Auto Scaling Groups]
-        J[📊 Cloud Monitoring]
-        K[🔄 Backup & Recovery]
-        L[🌍 Multi-Region Deployment]
-    end
-    
-    A --> B
-    B --> C
-    C --> D
-    E --> F
-    F --> G
-    G --> H
-    I --> J
-    J --> K
-    K --> L
-    
-    style A fill:#e8f5e8
-    style E fill:#e3f2fd
-    style I fill:#fff8e1
+┌──────────────────────────────────────────┐
+│         FRONTEND (React)                 │
+│      http://localhost:3000               │
+│                                          │
+│  ┌────────────┐    ┌──────────────┐    │
+│  │  Portal    │    │  Dashboard   │    │
+│  │ Pacientes  │    │   Médicos    │    │
+│  └────────────┘    └──────────────┘    │
+│                                          │
+│  React + TypeScript + Tailwind CSS      │
+└──────────────────────────────────────────┘
+                    │
+                    │ HTTP/REST (JWT)
+                    │
+┌──────────────────────────────────────────┐
+│       BACKEND API (FastAPI)              │
+│      http://localhost:8000               │
+│                                          │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐ │
+│  │  Auth   │  │ Records │  │   OCR   │ │
+│  │ Module  │  │  Module │  │ Module  │ │
+│  └─────────┘  └─────────┘  └─────────┘ │
+│                                          │
+│  FastAPI + SQLAlchemy                   │
+└──────────────────────────────────────────┘
+                    │
+                    │
+┌──────────────────────────────────────────┐
+│    ALMACENAMIENTO LOCAL                  │
+│                                          │
+│  📁 backend/uploads/                     │
+│     └── medical-records/                 │
+│         ├── patient1_file1.pdf           │
+│         ├── patient1_file2.jpg           │
+│         └── ...                          │
+│                                          │
+│  💾 backend/panamahealth.db (SQLite)     │
+│     ├── users                            │
+│     ├── medical_records                  │
+│     ├── access_permissions               │
+│     └── audit_logs                       │
+└──────────────────────────────────────────┘
 ```
 
 ---
 
-## 📋 Especificaciones Técnicas
+## Componentes Detallados
 
-### Requisitos del Sistema
+### 1. Frontend (React)
 
-| Componente | Especificación | Propósito |
-|------------|----------------|-----------|
-| **CPU** | 16+ cores | Procesamiento de IA y blockchain |
-| **RAM** | 64+ GB | Carga de modelos ML y cache |
-| **Storage** | 1TB+ SSD | Base de datos y documentos |
-| **Network** | 10Gbps+ | Alto throughput de datos |
-| **GPU** | NVIDIA RTX 4090+ | Aceleración de IA |
+**Responsabilidades:**
+- Interfaz de usuario
+- Manejo de estado con React Query
+- Validación de formularios
+- Visualización de documentos
 
-### Tecnologías de Soporte
+**Estructura:**
+```
+frontend/
+├── src/
+│   ├── components/        # Componentes reutilizables
+│   ├── pages/            # Páginas principales
+│   │   ├── Login.tsx
+│   │   ├── PatientDashboard.tsx
+│   │   └── DoctorDashboard.tsx
+│   ├── services/         # Llamadas a API
+│   ├── hooks/            # Custom hooks
+│   └── utils/            # Utilidades
+└── public/
+```
 
-- **Containerización:** Docker + Kubernetes
-- **CI/CD:** GitHub Actions + ArgoCD
-- **Monitoring:** Prometheus + Grafana
-- **Logging:** ELK Stack (Elasticsearch, Logstash, Kibana)
-- **Security:** HashiCorp Vault + OWASP ZAP
+**Tecnologías:**
+- React 18
+- TypeScript
+- React Router
+- React Query (para estado del servidor)
+- Tailwind CSS
+- Axios (para llamadas HTTP)
 
 ---
 
-*Este documento de arquitectura es parte del proyecto PanamaHealth Vault para Samsung Innovation Campus 2025*
+### 2. Backend (FastAPI)
+
+**Responsabilidades:**
+- API REST
+- Autenticación y autorización
+- Lógica de negocio
+- Procesamiento de archivos
+- OCR de documentos
+
+**Estructura:**
+```
+backend/
+├── app/
+│   ├── main.py           # Punto de entrada
+│   ├── config.py         # Configuración
+│   ├── models/           # Modelos de DB
+│   │   ├── user.py
+│   │   ├── record.py
+│   │   └── permission.py
+│   ├── schemas/          # Schemas Pydantic
+│   ├── routers/          # Endpoints
+│   │   ├── auth.py
+│   │   ├── records.py
+│   │   └── users.py
+│   ├── services/         # Lógica de negocio
+│   │   ├── auth_service.py
+│   │   ├── record_service.py
+│   │   └── ocr_service.py
+│   └── utils/
+│       ├── security.py
+│       └── storage.py
+└── tests/
+```
+
+**Endpoints Principales:**
+
+```
+POST   /api/auth/register     # Registro de usuario
+POST   /api/auth/login        # Login
+GET    /api/users/me          # Usuario actual
+
+POST   /api/records           # Crear expediente
+GET    /api/records           # Listar expedientes
+GET    /api/records/{id}      # Ver expediente
+DELETE /api/records/{id}      # Eliminar expediente
+
+POST   /api/permissions       # Dar acceso a médico
+GET    /api/permissions       # Ver permisos
+DELETE /api/permissions/{id}  # Revocar acceso
+```
+
+---
+
+### 3. Almacenamiento Local
+
+#### Base de Datos (SQLite)
+
+**Archivo**: `backend/panamahealth.db` (SQLite)
+
+**Esquema de Base de Datos:**
+
+```sql
+-- Usuarios
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('patient', 'doctor', 'admin')),
+    cedula VARCHAR(20) UNIQUE,
+    phone VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Expedientes médicos
+CREATE TABLE medical_records (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    patient_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    category VARCHAR(50), -- 'exam', 'prescription', 'diagnosis', 'other'
+    file_path VARCHAR(500) NOT NULL,
+    file_type VARCHAR(50),
+    file_size INTEGER,
+    ocr_text TEXT,
+    ocr_processed BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Permisos de acceso
+CREATE TABLE access_permissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    patient_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    doctor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    granted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    revoked_at TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE,
+    UNIQUE(patient_id, doctor_id)
+);
+
+-- Logs de auditoría
+CREATE TABLE audit_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id),
+    record_id UUID REFERENCES medical_records(id),
+    action VARCHAR(50) NOT NULL, -- 'view', 'create', 'update', 'delete'
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices para performance
+CREATE INDEX idx_records_patient ON medical_records(patient_id);
+CREATE INDEX idx_permissions_patient ON access_permissions(patient_id);
+CREATE INDEX idx_permissions_doctor ON access_permissions(doctor_id);
+CREATE INDEX idx_audit_user ON audit_logs(user_id);
+CREATE INDEX idx_audit_record ON audit_logs(record_id);
+```
+
+#### Almacenamiento de Archivos (Local)
+
+```
+backend/uploads/
+└── medical-records/
+    ├── {uuid}_documento1.pdf
+    ├── {uuid}_examen1.jpg
+    └── ...
+
+Estructura:
+- Carpeta base: backend/uploads/
+- Subcarpeta: medical-records/
+- Nombres: {UUID}_{nombre_original}.{extensión}
+- Tamaño máximo: 10MB por archivo
+- Formatos permitidos: PDF, JPG, PNG
+```
+
+---
+
+## Flujos de Trabajo
+
+### Flujo 1: Registro e Inicio de Sesión
+
+```
+1. Usuario ingresa datos en formulario
+2. Frontend valida datos
+3. Frontend envía POST /api/auth/register
+4. Backend valida y hashea contraseña
+5. Backend crea usuario en DB
+6. Backend genera token JWT
+7. Frontend guarda token y redirige a dashboard
+```
+
+### Flujo 2: Subir Documento Médico
+
+```
+1. Paciente selecciona archivo PDF/imagen
+2. Frontend valida tipo y tamaño
+3. Frontend envía POST /api/records con multipart/form-data
+4. Backend valida autenticación
+5. Backend sube archivo a MinIO
+6. Backend crea registro en DB
+7. Backend encola trabajo de OCR (background)
+8. OCR procesa documento y actualiza DB
+9. Frontend muestra confirmación
+```
+
+### Flujo 3: Médico Accede a Expediente
+
+```
+1. Médico busca paciente por nombre/cédula
+2. Frontend envía GET /api/records?patient_id=X
+3. Backend verifica permiso en access_permissions
+4. Si tiene permiso, devuelve lista de expedientes
+5. Médico selecciona documento
+6. Frontend visualiza PDF/imagen
+7. Backend registra acceso en audit_logs
+```
+
+### Flujo 4: Compartir Expediente con Médico
+
+```
+1. Paciente busca médico
+2. Paciente selecciona médico y otorga acceso
+3. Frontend envía POST /api/permissions
+4. Backend crea registro en access_permissions
+5. Backend envía notificación (futuro)
+6. Médico ahora puede ver expedientes
+```
+
+---
+
+## Seguridad
+
+### Autenticación
+
+```python
+# JWT con access token
+# Expiración: 24 horas
+# Algoritmo: HS256
+
+# Ejemplo de payload:
+{
+    "sub": "user_id",
+    "email": "user@email.com",
+    "role": "patient",
+    "exp": 1234567890
+}
+```
+
+### Autorización
+
+```python
+# Decorador para proteger endpoints
+@router.get("/records/{record_id}")
+async def get_record(
+    record_id: UUID,
+    current_user: User = Depends(get_current_user)
+):
+    # Verificar que el usuario tenga permiso
+    if not has_access(current_user, record_id):
+        raise HTTPException(status_code=403)
+    return record
+```
+
+### Almacenamiento de Archivos
+
+- Archivos guardados en MinIO con nombres UUID
+- Encriptación en tránsito (HTTPS)
+- Control de acceso por usuario
+- Límite de tamaño: 10MB por archivo
+
+---
+
+## Escalabilidad
+
+### Fase Actual (MVP)
+- 1 instancia de backend
+- 1 base de datos PostgreSQL
+- 1 instancia de MinIO
+- Soporta ~100 usuarios concurrentes
+
+### Fase 2 (Crecimiento)
+- Load balancer + múltiples instancias backend
+- PostgreSQL con réplicas de lectura
+- Redis para caché
+- CDN para archivos estáticos
+- Soporta ~10,000 usuarios
+
+### Fase 3 (Producción)
+- Kubernetes para orquestación
+- PostgreSQL con sharding
+- MinIO distribuido
+- Múltiples regiones
+- Soporta ~100,000+ usuarios
+
+---
+
+## Monitoreo
+
+### Métricas Clave
+
+- **Disponibilidad**: Uptime del sistema
+- **Latencia**: Tiempo de respuesta de API
+- **Throughput**: Requests por segundo
+- **Errores**: Tasa de errores 4xx/5xx
+- **Storage**: Espacio usado en MinIO
+
+### Herramientas
+
+- **Logs**: Python logging + archivo
+- **Métricas**: Endpoint /metrics (futuro)
+- **Alertas**: Email en errores críticos
+- **Backups**: PostgreSQL diario, MinIO semanal
+
+---
+
+## Testing
+
+### Backend
+```bash
+# Unit tests
+pytest tests/unit/
+
+# Integration tests
+pytest tests/integration/
+
+# Coverage
+pytest --cov=app tests/
+```
+
+### Frontend
+```bash
+# Component tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+```
+
+---
+
+## Despliegue
+
+### Desarrollo Local (SIN DOCKER)
+```bash
+# Backend
+cd backend && ./start.sh
+
+# Frontend (otra terminal)
+cd frontend && npm install && npm start
+```
+
+### Producción (ejemplo con Railway/Render)
+```bash
+# Backend: Deploy directo con Python
+# Frontend: Deploy con build de React
+# DB: SQLite o migrar a PostgreSQL
+# Storage: Sistema de archivos o S3
+
+# NO SE REQUIERE Docker en ningún momento
+```
+
+---
+
+## Variables de Entorno
+
+```env
+# Backend
+DATABASE_URL=postgresql://user:pass@localhost/dbname
+SECRET_KEY=your-secret-key-here
+MINIO_ENDPOINT=localhost:9000
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+REDIS_URL=redis://localhost:6379
+
+# Frontend
+REACT_APP_API_URL=http://localhost:8000
+```
+
+---
+
+## Próximas Mejoras Técnicas
+
+1. **Caché**: Implementar Redis para sesiones y queries frecuentes
+2. **CDN**: Servir archivos estáticos desde CDN
+3. **Queue**: Celery para procesamiento asíncrono de OCR
+4. **Search**: Elasticsearch para búsqueda full-text
+5. **Real-time**: WebSockets para notificaciones en vivo
+
+---
+
+<div align="center">
+
+**Arquitectura simple, escalable y mantenible**
+
+*Samsung Innovation Campus 2025*
+
+</div>
